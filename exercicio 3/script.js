@@ -1,42 +1,47 @@
-const buttons = document.
-getElementsByClassName('menu-btn');
+const table = document.getElementById("tableKey");
+let tbody = table.children[0];
+let savedThead = table.children[0];
 
-const itens = document.
-getElementsByClassName('food-item');
+function generateKey(){
+    console.log("Generate Euromilhões Key");
 
-let clickedButton = 'featured';
-selectItens(clickedButton);
+    const key = {
+        numbers: generateXNumbersBetweenMinAndMax(5, 1, 50),
+        stars:generateXNumbersBetweenMinAndMax(2, 1, 12)
+    }
 
-for( let button of buttons ) {
-    button.addEventListener(
-        'click',
-        () => {
-            selectItens(button.id);
-        }
-    )
+    key.numbers = sortIntArray(key.numbers);
+    key.stars = sortIntArray(key.stars);
+
+    addKeyToHtmlTable(key)
+
 }
 
-function selectItens( id ) {
-    clickedButton = id;
+function generateXNumbersBetweenMinAndMax(length, minNumber, maxNumber){
 
-    // removo todas as classes active dos butões
-    for( let button of buttons ) {
-        button.className = 'menu-btn';
+    let numbers = [];
+
+    while(numbers.length < length){
+        let randomNumber = Math.random() * (maxNumber - minNumber) + minNumber;
+        numbers.push(Math.floor(randomNumber));
     }
 
-    // pelo id recebido, pego no buttao carregado
-    // aplico a class de butao activo
-    let button = document.getElementById(id);
-    button.className = 'menu-btn active-btn';
+    return numbers;
+}
 
-    for( let item of itens ) {
-        // o item é um element HTML.
-        if(item.className === 'food-item '+ clickedButton)
-        {
-            // mostrar os itens com a class drinks
-            item.style.display = 'grid';
-        } else {
-            item.style.display = 'none';
-        }
-    }
+function sortIntArray(array){
+    array.sort((a,b) => a - b)
+}
+
+function  addKeyToHtmlTable(key){
+
+
+
+    tbody.innerHTML =tbody.innerHTML + '<tr>' + '<td>' + key.numbers.join('-') + '**' +  key.stars.join('-') + '</td>' + '<td>' + key.numbers.join('-') + '</td>' + '<td>' + key.numbers + '</td>' + '</tr>'
+
+
+}
+
+function cleanTable(){
+    tbody = savedThead;
 }
